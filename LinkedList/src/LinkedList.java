@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 public class LinkedList {
 
     // Nested Node class
@@ -17,35 +19,112 @@ public class LinkedList {
     // @Desc: addLast method
     // @Access: Public
     public void addLast(int item){
-        Node node  = new Node(item);
-        if(headIsNull())
-            head = tail = node;
+        Node newNode  = new Node(item);
+        if(isNull())
+            head = tail = newNode;
         else{
-            tail.next = node;
-            tail = node;
+           tail.next = newNode;
+           tail = newNode;
         }
     }
 
     // @Desc: addFirst method
     // @Access: Public
     public void addFirst(int item){
-        Node node = new Node(item);
-        if(headIsNull())
-            head = tail = node;
+        Node newNode = new Node(item);
+        if(isNull())
+            head = tail = newNode;
         else{
-            Node tempHead = head;
-            head = node;
-            head.next = tempHead;
+            newNode.next = head;
+            head = newNode;
         }
 
     }
 
-    private boolean headIsNull(){
-        boolean  isNull = false;
-        if(head == null) {
-              isNull =  true;
+    // @Desc: indexOf method
+    // @Access: Public
+    public int indexOf(int item){
+        /*
+        * While there are still more items in the list,
+        * Iterate through the list until you find an index that has
+        * the item as its value.
+        * */
+        Node current = head;
+        int index = 0;
+       while(current != null){
+           if(current.value == item)
+               return index;
+           current = current.next;
+           index++;
+       }
+       return -1;
+    }
+
+    // @Desc: contains method
+    // @Access: Public
+    public boolean contains(int item){
+        /*
+        * Iterate through the list
+        * Return true if list contains item passed
+        *
+        * */
+        Node current = head;
+        int index = 0;
+        while(current != null){
+            if(current.value == item)
+                return true;
+            current = current.next;
+            index++;
         }
-        return isNull;
+        return false;
+    }
+    // @Desc: deleteHead method
+    // @Access: Public
+    public void deleteHead(){
+        /*
+        * Remove the head node from the list by setting
+        * the head as the second node in the list
+        * */
+        if(isNull()){
+            throw new NoSuchElementException();
+        }
+        if(head == tail){
+            head = tail = null;
+            return;
+        }
+        var tempHead = head.next;
+        head = null;
+        head = tempHead;
+    }
+
+    // @Desc: deleteTail method
+    // @Access: Public
+    public void deleteTail(){
+        if(isNull())
+            throw new NoSuchElementException();
+        if(head == tail){
+            head = tail = null;
+            return;
+        }
+        var current = head;
+        Node prev = null;
+        while(current != null){
+            if(current.next == tail){
+                 prev = current;
+                break;
+            }
+            current = current.next;
+        }
+        
+        tail = prev;
+        prev.next = null;
+
+
+    }
+
+
+    private boolean isNull(){
+       return head == null;
     }
 
 } // End of LinkedList class
